@@ -1,20 +1,13 @@
 import { Request, Response } from "express";
 import cache from "../config/utils/node";
 import {pascienteAddRepo,pascienteExist,pascienteAllRepo,pascienteByIdRepo,pacientesUpdate,pascienteDeleteRepo} from "../repository/pasciente_repository"
-import Pasciente from "../config/interface/pasciente_interface";
+import Pasciente, { PascienteMY } from "../config/interface/pasciente_interface";
 
 export const pascienteAdd = async(req:Request,res:Response)=>{
     try{
         const {nome, dataNascimento,carteirinha,cpf} = req.body;
 
-        const pascienteNove: Pasciente = {
-            nome: nome.trim(),
-            dataNascimento: dataNascimento.trim(),
-            carteirinha:carteirinha.trim(),
-            cpf: cpf.trim()
-        }
-
-        const exist:boolean = await pascienteExist(pascienteNove.nome)
+        const exist:boolean = await pascienteExist(nome)
 
         if(exist){
             return res.status(209).json({
@@ -22,11 +15,11 @@ export const pascienteAdd = async(req:Request,res:Response)=>{
             })
         }
 
-        await pascienteAddRepo(pascienteNove)
+        await pascienteAddRepo(req.body)
 
         return res.status(200).json({
             message:"pasciente",
-            pascienteNove
+            pasciente: req.body
         })
     }catch(e){
         const erro = e as Error
@@ -63,7 +56,7 @@ export const pascienteAll = async(req:Request, res:Response)=>{
 export const pascienteById = async(req:Request<{id:number}>,res:Response)=>{
     try{
         const {id} = req.params
-        const pasciente: Pasciente = await pascienteByIdRepo(id)
+        const pasciente: PascienteMY[] = await pascienteByIdRepo(id)
 
         return res.status(200).json({
             message:"Pasciente",

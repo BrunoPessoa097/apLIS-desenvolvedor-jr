@@ -14,6 +14,7 @@ export const pascienteValidate = (req:Request, res:Response,next:NextFunction) =
                     })
         }
 
+        req.body = value
         next();
 
     }catch(e){

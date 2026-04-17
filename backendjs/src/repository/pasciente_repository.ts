@@ -1,4 +1,4 @@
-import Pasciente from "../config/interface/pasciente_interface";
+import Pasciente,{PascienteMY} from "../config/interface/pasciente_interface";
 import { ResultSetHeader } from "mysql2"
 import connection from "../config/database/mysql"
 
@@ -24,22 +24,22 @@ export const pascienteAddRepo = async(pasciente: Pasciente):Promise<boolean>=>{
 export const pascienteExist = async(nome: string):Promise<boolean>=>{
     const query = `SELECT  * FROM pacientes WHERE nome=?`
 
-    const [row]:any = await connection.query(query,[nome])
+    const [row] = await connection.query<PascienteMY[]>(query,[nome])
     return row.length > 0
 }
 
 export const pascienteAllRepo = async():Promise<Pasciente[]>=>{
     const query =  `SELECT * FROM pacientes`
 
-    const [rows]:any = await connection.query(query)
+    const [rows] = await connection.query<PascienteMY[]>(query)
     return rows
 }
 
-export const pascienteByIdRepo = async(id: number):Promise<Pasciente>=>{
+export const pascienteByIdRepo = async(id: number):Promise<PascienteMY[]>=>{
     const query = `SELECT * FROM pacientes WHERE id = ?`
 
-    const [row]:any = await connection.query(query,[id])
-    return row
+    const [row] = await connection.query(query,[id])
+    return row as PascienteMY[]
 }
 
 export const pacientesUpdate = async(id: number, pasciente: Pasciente):Promise<boolean>=>{
@@ -73,7 +73,7 @@ export const pacientesUpdate = async(id: number, pasciente: Pasciente):Promise<b
 export const pascienteDeleteRepo = async(id: number)=>{
     const query = `DELETE FROM pacientes WHERE id = ?`
 
-    const [result]: any = await connection.execute(query, [id])
+    const [result] = await connection.execute<ResultSetHeader>(query, [id])
 
     return result.affectedRows
 }
