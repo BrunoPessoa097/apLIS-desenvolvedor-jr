@@ -46,6 +46,14 @@ class MedicoController {
     public function medicoById($request, $response, $args) {
         $data = $this->repo->buscarID($args['id']);
 
+        if(!$data){
+            $response->getBody()->write(json_encode([
+                "message" => "Médico Não encontrado",
+            ]));
+
+            return $response->withHeader('Content-Type', 'application/json');
+        }
+
 
         $response->getBody()->write(json_encode([
             "message" => "Médico ID",
@@ -63,6 +71,16 @@ class MedicoController {
         if($exist){
             $response->getBody()->write(json_encode([
                 "message" => "Conflito médico ja encontra salvo",
+            ]));
+
+            return $response->withHeader('Content-Type', 'application/json');
+        }
+
+        $data = $this->repo->buscarID($args['id']);
+
+        if(!$data){
+            $response->getBody()->write(json_encode([
+                "message" => "Médico Não encontrado",
             ]));
 
             return $response->withHeader('Content-Type', 'application/json');
