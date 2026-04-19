@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
-import pascienteJoi from '../config/joi/pasciente_joi';
+import pacienteJoi from '../config/joi/paciente_joi';
 
-export const pascienteValidate = (req: Request, res: Response, next: NextFunction) => {
+export const pacienteValidate = (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { value, error } = pascienteJoi.validate(req.body, { abortEarly: false });
+    const { value, error } = pacienteJoi.validate(req.body, { abortEarly: false });
 
     if (error) {
       return res.status(404).json({

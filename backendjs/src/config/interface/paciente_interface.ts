@@ -1,16 +1,16 @@
 import { RowDataPacket } from 'mysql2';
-interface Pasciente {
+interface Paciente {
   nome: string;
   dataNascimento: Date;
   carteirinha: string;
   cpf: string;
 }
 
-export interface PascienteMY extends RowDataPacket {
+export interface PacienteMY extends RowDataPacket {
   nome: string;
   dataNascimento: Date;
   carteirinha: string;
   cpf: string;
 }
 
-export default Pasciente;
+export default Paciente;

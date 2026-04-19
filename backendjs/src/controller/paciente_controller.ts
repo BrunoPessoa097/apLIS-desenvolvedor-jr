@@ -1,32 +1,32 @@
 import { Request, Response } from 'express';
-import cache from '../config/utils/node';
+// import cache from '../config/utils/node';
 import {
-  pascienteAddRepo,
-  pascienteExist,
-  pascienteAllRepo,
-  pascienteByIdRepo,
+  pacienteAddRepo,
+  pacienteExist,
+  pacienteAllRepo,
+  pacienteByIdRepo,
   pacientesUpdate,
-  pascienteDeleteRepo,
+  pacienteDeleteRepo,
 } from '../repository/pasciente_repository';
-import { PascienteMY } from '../config/interface/pasciente_interface';
+import { PacienteMY } from '../config/interface/paciente_interface';
 
-export const pascienteAdd = async (req: Request, res: Response) => {
+export const pacienteAdd = async (req: Request, res: Response) => {
   try {
     const { nome } = req.body;
 
-    const exist: boolean = await pascienteExist(nome);
+    const exist: boolean = await pacienteExist(nome);
 
     if (exist) {
       return res.status(209).json({
-        message: 'pasciente já encontrase cadastrado',
+        message: 'paciente já encontrase cadastrado',
       });
     }
 
-    await pascienteAddRepo(req.body);
+    await pacienteAddRepo(req.body);
 
     return res.status(200).json({
-      message: 'pasciente',
-      pasciente: req.body,
+      message: 'paciente',
+      paciente: req.body,
     });
   } catch (e) {
     const erro = e as Error;
@@ -36,21 +36,21 @@ export const pascienteAdd = async (req: Request, res: Response) => {
   }
 };
 
-export const pascienteAll = async (req: Request, res: Response) => {
+export const pacienteAll = async (req: Request, res: Response) => {
   try {
-    const pascienteCache = cache.get('pasciente');
-    if (pascienteCache) {
-      return res.status(200).json({
-        message: 'lista de usuario',
-        pasciente: pascienteCache,
-      });
-    }
-    const pasciente = await pascienteAllRepo();
-    cache.set('pasciente', pasciente);
+    // const pacienteCache = cache.get('paciente');
+    // if (pacienteCache) {
+    //   return res.status(200).json({
+    //     message: 'lista de usuario',
+    //     paciente: pacienteCache,
+    //   });
+    // }
+    const paciente = await pacienteAllRepo();
+    // cache.set('paciente', paciente);
 
     return res.status(200).json({
-      message: 'lista de pasciente',
-      pasciente,
+      message: 'lista de paciente',
+      paciente,
     });
   } catch (e) {
     const erro = e as Error;
@@ -60,14 +60,14 @@ export const pascienteAll = async (req: Request, res: Response) => {
   }
 };
 
-export const pascienteById = async (req: Request<{ id: number }>, res: Response) => {
+export const pacienteById = async (req: Request<{ id: number }>, res: Response) => {
   try {
     const { id } = req.params;
-    const pasciente: PascienteMY[] = await pascienteByIdRepo(id);
+    const paciente: PacienteMY[] = await pacienteByIdRepo(id);
 
     return res.status(200).json({
-      message: 'Pasciente',
-      pasciente,
+      message: 'Paciente',
+      paciente,
     });
   } catch (e) {
     const erro = e as Error;
@@ -77,13 +77,13 @@ export const pascienteById = async (req: Request<{ id: number }>, res: Response)
   }
 };
 
-export const pascienteUpdate = async (req: Request, res: Response) => {
+export const pacienteUpdate = async (req: Request, res: Response) => {
   try {
     const id = Number(req.params.id);
 
-    const pasciente = await pascienteByIdRepo(id);
+    const paciente = await pacienteByIdRepo(id);
 
-    if (!pasciente) {
+    if (!paciente) {
       return res.status(404).json({
         message: 'Paciente não encontrado',
       });
@@ -108,19 +108,19 @@ export const pascienteUpdate = async (req: Request, res: Response) => {
   }
 };
 
-export const pascienteDelete = async (req: Request, res: Response) => {
+export const pacienteDelete = async (req: Request, res: Response) => {
   try {
     const id = Number(req.params.id);
 
-    const pasciente = await pascienteByIdRepo(id);
+    const paciente = await pacienteByIdRepo(id);
 
-    if (!pasciente) {
+    if (!paciente) {
       return res.status(404).json({
         message: 'Paciente não encontrado',
       });
     }
 
-    const deleted = await pascienteDeleteRepo(id);
+    const deleted = await pacienteDeleteRepo(id);
 
     if (deleted === 0) {
       return res.status(400).json({

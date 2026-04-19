@@ -64,9 +64,9 @@ class MedicoController {
     }
 
     public function medicoUpdate($request, $response,$args) {
-        $data = $request->getParsedBody();
+        $update = $request->getParsedBody();
 
-        $exist = $this->repo->buscar($data['nome']);
+        $exist = $this->repo->buscar($update['nome']);
 
         if($exist){
             $response->getBody()->write(json_encode([
@@ -86,7 +86,7 @@ class MedicoController {
             return $response->withHeader('Content-Type', 'application/json');
         }
 
-        $atualizar = $this->repo->update($args['id'],$data);
+        $atualizar = $this->repo->update($args['id'],$update);
 
         $response->getBody()->write(json_encode([
             "message" => "Médico Update",

@@ -1,10 +1,12 @@
 import express, { type Application } from 'express';
 import compression from 'compression';
+import cors from 'cors';
 import { padraoInicial, padraoNoROute } from '../controller/app_controller';
-import pascienteRoute from './pasciente_route';
+import pacienteRoute from './paciente_route';
 
 const app: Application = express();
 app.use(express.json());
+app.use(cors());
 app.use(
   compression({
     level: 6,
@@ -12,7 +14,7 @@ app.use(
   }),
 );
 
-app.use(pascienteRoute);
+app.use(pacienteRoute);
 
 app.get('/api/v1', padraoInicial);
 app.use(padraoNoROute);

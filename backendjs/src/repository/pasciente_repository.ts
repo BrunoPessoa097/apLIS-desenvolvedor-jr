@@ -1,9 +1,9 @@
-import Pasciente, { PascienteMY } from '../config/interface/pasciente_interface';
+import Paciente, { PacienteMY } from '../config/interface/paciente_interface';
 import { ResultSetHeader } from 'mysql2';
 import connection from '../config/database/mysql';
 
-export const pascienteAddRepo = async (pasciente: Pasciente): Promise<boolean> => {
-  const { nome, dataNascimento, carteirinha, cpf } = pasciente;
+export const pacienteAddRepo = async (paciente: Paciente): Promise<boolean> => {
+  const { nome, dataNascimento, carteirinha, cpf } = paciente;
 
   const query = `
         INSERT INTO pacientes (nome, dataNascimento, carteirinha, cpf)
@@ -16,28 +16,28 @@ export const pascienteAddRepo = async (pasciente: Pasciente): Promise<boolean> =
   return true;
 };
 
-export const pascienteExist = async (nome: string): Promise<boolean> => {
+export const pacienteExist = async (nome: string): Promise<boolean> => {
   const query = `SELECT  * FROM pacientes WHERE nome=?`;
 
-  const [row] = await connection.query<PascienteMY[]>(query, [nome]);
+  const [row] = await connection.query<PacienteMY[]>(query, [nome]);
   return row.length > 0;
 };
 
-export const pascienteAllRepo = async (): Promise<Pasciente[]> => {
+export const pacienteAllRepo = async (): Promise<Paciente[]> => {
   const query = `SELECT * FROM pacientes`;
 
-  const [rows] = await connection.query<PascienteMY[]>(query);
+  const [rows] = await connection.query<PacienteMY[]>(query);
   return rows;
 };
 
-export const pascienteByIdRepo = async (id: number): Promise<PascienteMY[]> => {
+export const pacienteByIdRepo = async (id: number): Promise<PacienteMY[]> => {
   const query = `SELECT * FROM pacientes WHERE id = ?`;
 
   const [row] = await connection.query(query, [id]);
-  return row as PascienteMY[];
+  return row as PacienteMY[];
 };
 
-export const pacientesUpdate = async (id: number, pasciente: Pasciente): Promise<boolean> => {
+export const pacientesUpdate = async (id: number, paciente: Paciente): Promise<boolean> => {
   const query = `
         UPDATE hospital.pacientes
         SET
@@ -50,10 +50,10 @@ export const pacientesUpdate = async (id: number, pasciente: Pasciente): Promise
     `;
 
   const values = [
-    pasciente.nome ?? null,
-    pasciente.dataNascimento ?? null,
-    pasciente.carteirinha ?? null,
-    pasciente.cpf ?? null,
+    paciente.nome ?? null,
+    paciente.dataNascimento ?? null,
+    paciente.carteirinha ?? null,
+    paciente.cpf ?? null,
     id,
   ];
 
@@ -62,7 +62,7 @@ export const pacientesUpdate = async (id: number, pasciente: Pasciente): Promise
   return result.affectedRows > 0;
 };
 
-export const pascienteDeleteRepo = async (id: number) => {
+export const pacienteDeleteRepo = async (id: number) => {
   const query = `DELETE FROM pacientes WHERE id = ?`;
 
   const [result] = await connection.execute<ResultSetHeader>(query, [id]);
